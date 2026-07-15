@@ -100,14 +100,21 @@ export default function Nav({ mobileOpen, onCloseMobile }) {
       >
         {/* Logo Section */}
         <div className="flex items-center justify-center w-[56px] h-[56px] shrink-0 mb-6">
-          <div
-            className="w-full h-full rounded-full flex items-center justify-center select-none shadow-[0_0_24px_rgba(225,6,0,0.5)] border border-white/10 transition-transform duration-250 hover:scale-105 active:scale-95 cursor-pointer"
-            style={{
-              background: 'linear-gradient(135deg, #e10600 0%, #9d0400 100%)',
-            }}
+          <Link
+            to="/"
+            className="relative flex items-center justify-center group transition-transform duration-250 hover:scale-105 active:scale-95"
+            aria-label="ApexGrid Home"
           >
-            <span className="text-white font-black text-lg tracking-tighter">AG</span>
-          </div>
+            {/* Soft red glow on hover */}
+            <div className="absolute inset-0 bg-primary/40 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <img 
+              src="/favicon.svg" 
+              alt="ApexGrid Logo" 
+              className="w-12 h-12 relative z-10 drop-shadow-sm"
+              loading="eager"
+            />
+          </Link>
         </div>
 
         {/* Primary nav */}

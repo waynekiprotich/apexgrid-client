@@ -82,11 +82,15 @@ export default function TopBar({ onMenuClick }) {
     <header className="flex items-center justify-between px-6 h-[76px] mt-6 mb-2 rounded-shell bg-glass shadow-premium-panel shrink-0 z-40 relative">
 
       {/* Mobile Logo */}
-      <div className="md:hidden flex items-center gap-2">
-        <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow-red shrink-0">
-          <span className="text-white font-black text-base">AG</span>
-        </div>
-      </div>
+      <Link to="/" className="md:hidden flex items-center gap-2 relative group" aria-label="ApexGrid Home">
+        <div className="absolute inset-0 bg-primary/40 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <img 
+          src="/favicon.svg" 
+          alt="ApexGrid Logo" 
+          className="w-10 h-10 relative z-10 drop-shadow-sm"
+          loading="eager"
+        />
+      </Link>
 
       {/* ── Left: Stat pills ─────────────────────────────────────────────── */}
       <div className="flex-1 flex items-center gap-3 min-w-0">
