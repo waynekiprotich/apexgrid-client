@@ -1,0 +1,10 @@
+/* TEAM */
+Engineer: AI Assistant
+Role: Lead Developer
+Site: https://apexgrid.com
+
+/* SITE */
+Last update: 2026-07-15
+Standards: HTML5, CSS3, ES6
+Components: React, Vite, Tailwind CSS
+Software: VS Code, Node.js, Python, Flask
