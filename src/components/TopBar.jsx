@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   LuSearch,
   LuBell,
@@ -10,7 +10,8 @@ import {
   LuLogOut,
   LuSettings,
   LuUsers,
-  LuTimer
+  LuTimer,
+  LuHeart
 } from 'react-icons/lu';
 import { useAuth } from '../contexts/AuthContext';
 import { profileApi } from '../services/resources';
@@ -35,6 +36,7 @@ export default function TopBar({ onMenuClick }) {
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   // Pull profile when signed in — drives the avatar initials + name
   const { data: profile } = useQuery({
@@ -60,8 +62,10 @@ export default function TopBar({ onMenuClick }) {
   }, [dropdownOpen]);
 
   const handleLogout = async () => {
+    setDropdownOpen(false);
+    queryClient.clear();
     await logout();
-    navigate('/login');
+    navigate('/');
   };
 
   const initials = profile?.username
@@ -136,6 +140,14 @@ export default function TopBar({ onMenuClick }) {
             {/* Dropdown Menu */}
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-[#111111]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-premium-panel py-2 z-50 animate-fade-in origin-top-right">
+                <Link
+                  to="/favorites"
+                  onClick={() => setDropdownOpen(false)}
+                  className="flex items-center gap-3 px-4 py-2 text-sm text-text hover:bg-white/5 transition-colors"
+                >
+                  <LuHeart size={15} className="text-muted" />
+                  Favorites
+                </Link>
                 <Link
                   to="/settings"
                   onClick={() => setDropdownOpen(false)}

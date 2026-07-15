@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthLayout } from '../layouts';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Login() {
   const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/dashboard';
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,7 @@ export default function Login() {
     try {
       setError('');
       await loginWithGoogle();
-      navigate('/dashboard');
+      navigate(from, { replace: true });
     } catch (err) {
       if (err.code !== 'auth/popup-closed-by-user') {
         setError(err.message || 'Google sign in failed');
@@ -32,7 +34,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(form.email, form.password);
-      navigate('/dashboard');
+      navigate(from, { replace: true });
     } catch (err) {
       let errorMessage = 'Invalid email or password';
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {

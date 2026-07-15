@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate, Link } from 'react-router-dom';
+import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 import Home from '../pages/Home';
@@ -17,9 +17,12 @@ import Register from '../pages/Register';
 
 const ProtectedRoute = ({ children }) => {
   const { currentUser } = useAuth();
+  const location = useLocation();
+  
   if (!currentUser) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
+  
   return children;
 };
 
