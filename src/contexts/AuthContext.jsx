@@ -6,7 +6,10 @@ import {
   signOut, 
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  updatePassword as firebaseUpdatePassword,
+  updateEmail as firebaseUpdateEmail,
+  deleteUser as firebaseDeleteUser
 } from 'firebase/auth';
 
 const AuthContext = createContext();
@@ -43,8 +46,23 @@ export const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  const updatePassword = (newPassword) => {
+    return firebaseUpdatePassword(auth.currentUser, newPassword);
+  };
+
+  const updateEmail = (newEmail) => {
+    return firebaseUpdateEmail(auth.currentUser, newEmail);
+  };
+
+  const deleteUser = () => {
+    return firebaseDeleteUser(auth.currentUser);
+  };
+
   return (
-    <AuthContext.Provider value={{ currentUser, login, register, loginWithGoogle, logout, loading }}>
+    <AuthContext.Provider value={{ 
+      currentUser, login, register, loginWithGoogle, logout, 
+      updatePassword, updateEmail, deleteUser, loading 
+    }}>
       {!loading && children}
     </AuthContext.Provider>
   );

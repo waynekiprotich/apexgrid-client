@@ -12,7 +12,7 @@ import { formatDateTime } from '../utils/formatters';
 import { LuTrash2, LuPencil, LuCheck, LuX } from 'react-icons/lu';
 
 export default function Profile() {
-  const { logout } = useAuth();
+  const { logout, updatePassword, updateEmail, deleteUser } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   
@@ -62,26 +62,58 @@ export default function Profile() {
 
   // ─── Mutations ───────────────────────────────────────────────────────────────
   const updateProfileMutation = useMutation({
-    mutationFn: (body) => profileApi.patch(body),
+    mutationFn: async ({ username, email, oldEmail }) => {
+      // If email changed, update in Firebase first
+      if (email && email !== oldEmail) {
+        await updateEmail(email);
+      }
+      return profileApi.patch({ username, email });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['profile']);
       setEditing(false);
       setProfileError('');
     },
     onError: (err) => {
-      setProfileError(err?.response?.data?.error?.message || 'Failed to update profile.');
+      if (err?.code === 'auth/requires-recent-login') {
+        setProfileError('Please sign out and sign back in to change your email.');
+      } else {
+        setProfileError(err?.response?.data?.error?.message || err?.message || 'Failed to update profile.');
+      }
     }
   });
 
   const updatePasswordMutation = useMutation({
-    mutationFn: (body) => profileApi.patch(body),
+    mutationFn: async ({ password }) => {
+      await updatePassword(password);
+    },
     onSuccess: () => {
       setEditingPassword(false);
       setPassForm({ current: '', new: '', confirm: '' });
       setPassError('');
     },
     onError: (err) => {
-      setPassError(err?.response?.data?.error?.message || 'Failed to update password.');
+      if (err?.code === 'auth/requires-recent-login') {
+        setPassError('Please sign out and sign back in to change your password.');
+      } else {
+        setPassError(err?.message || 'Failed to update password.');
+      }
+    }
+  });
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: async () => {
+      await profileApi.deleteAccount();
+      await deleteUser();
+    },
+    onSuccess: () => {
+      navigate('/login');
+    },
+    onError: (err) => {
+      console.error('Failed to delete account:', err);
+      alert(err?.code === 'auth/requires-recent-login' 
+        ? 'Please sign out and sign back in to delete your account.' 
+        : 'Failed to delete account.');
     }
   });
 
@@ -110,7 +142,7 @@ export default function Profile() {
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
   const handleSaveProfile = () => {
-    updateProfileMutation.mutate({ username, email });
+    updateProfileMutation.mutate({ username, email, oldEmail: profile?.email });
   };
 
   const handleSavePassword = () => {
@@ -129,6 +161,12 @@ export default function Profile() {
   const handleLogout = async () => {
     await logout();
     navigate('/login');
+  };
+
+  const handleDeleteAccount = () => {
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      deleteAccountMutation.mutate();
+    }
   };
 
   return (
@@ -396,13 +434,29 @@ export default function Profile() {
         </div>
 
         {/* ── Danger zone ─────────────────────────────────────────────────── */}
-        <div className="mt-8 card p-5 border-error/30">
-          <h3 className="text-sm font-semibold text-error mb-1">Sign out</h3>
-          <p className="text-xs text-muted mb-4">
-            You'll need to sign back in to access your favorites and saved dashboards.
-          </p>
-          <button className="btn border border-error/50 text-error hover:bg-error/10 transition-colors" onClick={handleLogout}>
+        <div className="mt-8 card p-5 border-error/30 flex flex-col sm:flex-row gap-6 justify-between items-start sm:items-center">
+          <div>
+            <h3 className="text-sm font-semibold text-text mb-1">Sign out</h3>
+            <p className="text-xs text-muted mb-4 sm:mb-0">
+              You'll need to sign back in to access your favorites and saved dashboards.
+            </p>
+          </div>
+          <button className="btn btn-outline hover:bg-surface-2 transition-colors shrink-0" onClick={handleLogout}>
             Sign out
+          </button>
+        </div>
+
+        <div className="mt-6 card p-5 border-error/50 bg-error/5">
+          <h3 className="text-sm font-semibold text-error mb-1">Delete Account</h3>
+          <p className="text-xs text-error/80 mb-4">
+            Permanently delete your account and all associated data. This action cannot be undone.
+          </p>
+          <button 
+            className="btn bg-error/10 text-error hover:bg-error hover:text-white transition-colors border border-error/20" 
+            onClick={handleDeleteAccount}
+            disabled={deleteAccountMutation.isLoading}
+          >
+            {deleteAccountMutation.isLoading ? 'Deleting...' : 'Delete account'}
           </button>
         </div>
       </div>

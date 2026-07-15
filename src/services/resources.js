@@ -35,8 +35,9 @@ export const sessionsApi = {
 
 // Profile
 export const profileApi = {
-  get: () => api.get('/profile'),
-  patch: (body) => api.patch('/profile', body),
+  get: () => api.get('/auth/profile'),
+  patch: (body) => api.patch('/auth/profile', body),
+  deleteAccount: () => api.delete('/auth/account'),
 };
 
 // Favorites
