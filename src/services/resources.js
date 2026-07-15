@@ -31,13 +31,7 @@ export const sessionsApi = {
   getRaceControl: (sessionKey, params) => api.get(`/sessions/${sessionKey}/racecontrol`, { params }),
 };
 
-// Auth
-export const authApi = {
-  register: (body) => api.post('/auth/register', body),
-  login: (body) => api.post('/auth/login', body),
-  refresh: () => api.post('/auth/refresh'),
-  logout: () => api.post('/auth/logout'),
-};
+
 
 // Profile
 export const profileApi = {

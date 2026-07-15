@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthLayout } from '../layouts';
-import { authApi } from '../services/resources';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Register() {
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '' });
@@ -30,19 +29,16 @@ export default function Register() {
 
     setLoading(true);
     try {
-      await authApi.register({
-        username: form.username,
-        email: form.email,
-        password: form.password,
-      });
-      // Auto-login after register
-      await login(form.email, form.password);
+      await register(form.email, form.password);
+      // login is handled automatically by Firebase onAuthStateChanged, 
+      // but we can explicitly call it or just navigate
       navigate('/dashboard');
     } catch (err) {
-      setError(
-        err?.response?.data?.error?.message ||
-        'Registration failed. Please try again.'
-      );
+      let errorMessage = 'Registration failed. Please try again.';
+      if (err.code === 'auth/email-already-in-use') errorMessage = 'Email is already in use.';
+      if (err.code === 'auth/weak-password') errorMessage = 'Password is too weak.';
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
