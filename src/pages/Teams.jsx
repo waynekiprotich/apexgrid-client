@@ -11,7 +11,7 @@ import { getTeamColor } from '../utils/formatters';
 
 export default function Teams() {
   const [season, setSeason] = useState(2024);
-  const { accessToken } = useAuth();
+  const { currentUser } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: constructors, isLoading, error, refetch } = useQuery({
@@ -24,7 +24,7 @@ export default function Teams() {
     queryKey: ['favorites', 'teams'],
     queryFn: () => favoritesApi.getTeams(),
     select: (r) => r.data?.data?.map(f => f.team_name) ?? [],
-    enabled: !!accessToken,
+    enabled: !!currentUser,
   });
 
   const addFavMutation = useMutation({
@@ -96,7 +96,7 @@ export default function Teams() {
                                 {team.points ?? '--'}
                               </span>
                               <span className="text-xs text-muted">pts</span>
-                              {accessToken && (
+                              {currentUser && (
                                 <button
                                   className={`p-1 rounded transition-colors ${isFav ? 'text-yellow-400' : 'text-muted hover:text-yellow-400'}`}
                                   onClick={() =>

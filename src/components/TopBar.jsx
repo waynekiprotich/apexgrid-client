@@ -30,7 +30,7 @@ function StatPill({ Icon, label, value, valueClass = '' }) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function TopBar({ onMenuClick }) {
-  const { accessToken, logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -41,7 +41,7 @@ export default function TopBar({ onMenuClick }) {
     queryKey: ['profile'],
     queryFn: () => profileApi.get(),
     select: (r) => r.data?.data,
-    enabled: !!accessToken,
+    enabled: !!currentUser,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -66,7 +66,7 @@ export default function TopBar({ onMenuClick }) {
 
   const initials = profile?.username
     ? profile.username.slice(0, 2).toUpperCase()
-    : accessToken ? '?' : null;
+    : currentUser ? '?' : null;
 
   const displayName = profile?.username
     ? profile.username.length > 10
@@ -115,7 +115,7 @@ export default function TopBar({ onMenuClick }) {
         </div>
 
         {/* User cluster */}
-        {accessToken && initials ? (
+        {currentUser && initials ? (
           <div className="relative shrink-0" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}

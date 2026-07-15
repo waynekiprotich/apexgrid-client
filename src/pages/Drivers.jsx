@@ -14,7 +14,7 @@ export default function Drivers() {
   const [search, setSearch] = useState('');
   const [teamFilter, setTeamFilter] = useState('All Teams');
   const [season, setSeason] = useState(2024);
-  const { accessToken } = useAuth();
+  const { currentUser } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: drivers, isLoading, error, refetch } = useQuery({
@@ -33,7 +33,7 @@ export default function Drivers() {
     queryKey: ['favorites', 'drivers'],
     queryFn: () => favoritesApi.getDrivers(),
     select: (r) => r.data?.data?.map(f => f.driver_number) ?? [],
-    enabled: !!accessToken,
+    enabled: !!currentUser,
   });
 
   const addFavMutation = useMutation({
@@ -121,7 +121,7 @@ export default function Drivers() {
                             >
                               {driver.driver_number}
                             </span>
-                            {accessToken && (
+                            {currentUser && (
                               <button
                                 className={`p-1 rounded transition-colors ${
                                   isFav ? 'text-yellow-400' : 'text-muted hover:text-yellow-400'

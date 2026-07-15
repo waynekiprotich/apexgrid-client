@@ -16,8 +16,8 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 
 const ProtectedRoute = ({ children }) => {
-  const { accessToken } = useAuth();
-  if (!accessToken) {
+  const { currentUser } = useAuth();
+  if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
   return children;
