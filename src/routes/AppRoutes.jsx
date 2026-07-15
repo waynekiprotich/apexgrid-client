@@ -11,7 +11,7 @@ import Sessions from '../pages/Sessions';
 import RaceCenter from '../pages/RaceCenter';
 import Analytics from '../pages/Analytics';
 import Favorites from '../pages/Favorites';
-import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 
@@ -48,8 +48,8 @@ const AppRoutes = () => (
     <Route path="/favorites" element={
       <ProtectedRoute><Favorites /></ProtectedRoute>
     } />
-    <Route path="/profile" element={
-      <ProtectedRoute><Profile /></ProtectedRoute>
+    <Route path="/settings" element={
+      <ProtectedRoute><Settings /></ProtectedRoute>
     } />
 
     <Route path="/login" element={<Login />} />
