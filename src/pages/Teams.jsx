@@ -40,7 +40,7 @@ export default function Teams() {
 
   return (
     <AppLayout>
-      <div className="py-8 animate-fade-in">
+      <div className="py-4 md:py-8 animate-fade-in">
         <PageHeader
           title="Teams"
           subtitle="Constructor standings"

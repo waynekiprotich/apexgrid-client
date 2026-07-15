@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   return (
     <AppLayout>
-      <div className="py-8 animate-fade-in space-y-6">
+      <div className="py-4 md:py-8 animate-fade-in space-y-4 md:space-y-6">
         <PageHeader
           title="Dashboard"
           subtitle="Season overview and standings"
@@ -61,7 +61,7 @@ export default function Dashboard() {
         />
 
         {/* Key stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {[
             { label: 'Rounds', value: sessions?.length ?? '--', sub: `${season} season` },
             { label: 'Leader', value: driverStandings?.[0]?.last_name ?? '--', sub: 'Driver standings' },
@@ -77,9 +77,9 @@ export default function Dashboard() {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-5 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
           {/* Driver standings table */}
-          <div className="md:col-span-3 space-y-6">
+          <div className="lg:col-span-3 space-y-6 overflow-hidden">
             <PointsChart data={chartData} />
             <DriverStandingsTable 
               data={driverStandings} 
@@ -90,7 +90,7 @@ export default function Dashboard() {
             />
           </div>
 
-          <div className="md:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-6 overflow-hidden">
             {/* Constructor standings */}
             <ConstructorStandingsList 
               data={constructorStandings} 

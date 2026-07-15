@@ -44,7 +44,7 @@ export default function Favorites() {
 
   return (
     <AppLayout>
-      <div className="py-8 animate-fade-in">
+      <div className="py-4 md:py-8 animate-fade-in">
         <PageHeader title="Favorites" subtitle="Your saved drivers and teams" />
 
         <div className="grid md:grid-cols-2 gap-8">

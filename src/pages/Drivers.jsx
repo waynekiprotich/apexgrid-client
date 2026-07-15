@@ -55,7 +55,7 @@ export default function Drivers() {
 
   return (
     <AppLayout>
-      <div className="py-8 animate-fade-in">
+      <div className="py-4 md:py-8 animate-fade-in">
         <PageHeader
           title="Drivers"
           subtitle={`${filtered.length} driver${filtered.length !== 1 ? 's' : ''}`}

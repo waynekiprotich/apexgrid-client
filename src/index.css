@@ -133,4 +133,5 @@
     @apply bg-white/5 backdrop-blur-2xl border border-white/5;
   }
   .mono { @apply font-mono; }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
 }

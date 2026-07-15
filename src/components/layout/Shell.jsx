@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Nav from '../Nav';
 import TopBar from '../TopBar';
+import BottomNav from './BottomNav';
 
 export default function Shell({ children }) {
   // Mobile drawer state
@@ -11,8 +12,10 @@ export default function Shell({ children }) {
 
   return (
     <div className="flex h-screen bg-bg overflow-hidden relative">
-      {/* ── Floating Sidebar ───────────────────────────────────────────── */}
-      <Nav mobileOpen={mobileOpen} onCloseMobile={closeMobileNav} />
+      {/* ── Floating Sidebar (Desktop only) ────────────────────────────── */}
+      <div className="hidden md:block">
+        <Nav mobileOpen={mobileOpen} onCloseMobile={closeMobileNav} />
+      </div>
 
       {/* ── Content column ─────────────────────────────────────────────── */}
       {/* Left padding accommodates the fixed sidebar on desktop (24px margin + 88px width + 18px gap = 130px) */}
@@ -21,11 +24,14 @@ export default function Shell({ children }) {
           <TopBar onMenuClick={toggleMobileNav} />
 
           {/* Scrollable page content */}
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto pb-28 md:pb-6 custom-scrollbar">
             {children}
           </main>
         </div>
       </div>
+      
+      {/* ── Bottom Navigation (Mobile only) ────────────────────────────── */}
+      <BottomNav />
     </div>
   );
 }

@@ -89,7 +89,7 @@ export default function Analytics() {
 
   return (
     <AppLayout>
-      <div className="py-8 animate-fade-in">
+      <div className="py-4 md:py-8 animate-fade-in">
         <PageHeader
           title="Analytics"
           subtitle="Session performance analysis"

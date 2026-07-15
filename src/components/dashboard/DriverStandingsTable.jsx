@@ -10,8 +10,9 @@ export default function DriverStandingsTable({ data, isLoading, error, refetch, 
       {error ? (
         <ErrorState message="Failed to load standings" onRetry={refetch} />
       ) : (
-        <table className="data-table">
-          <thead>
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="data-table">
+            <thead>
             <tr>
               <th className="w-10 pl-6">#</th>
               <th>Driver</th>
@@ -45,10 +46,10 @@ export default function DriverStandingsTable({ data, isLoading, error, refetch, 
                     <td className="text-right font-mono font-bold text-text">{d.points ?? '--'}</td>
                     <td className="text-right font-mono text-muted hidden md:table-cell pr-6">{d.wins ?? '--'}</td>
                   </tr>
-                ))
-            }
+                ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       )}
     </CardWithHeader>
   );

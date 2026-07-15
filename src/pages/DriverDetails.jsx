@@ -46,7 +46,7 @@ export default function DriverDetails() {
 
   return (
     <AppLayout>
-      <div className="py-8 animate-fade-in">
+      <div className="py-4 md:py-8 animate-fade-in">
         {/* Breadcrumb */}
         <Link to="/drivers" className="text-xs text-muted hover:text-text transition-colors inline-flex items-center gap-1 mb-6">
           ← Drivers
